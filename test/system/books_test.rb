@@ -3,13 +3,18 @@
 require 'application_system_test_case'
 
 class BooksTest < ApplicationSystemTestCase
+  include Devise::Test::IntegrationHelpers
+
   setup do
-    @book = books(:one)
+    @book = create :book
+    @new_book = build :book
+    @user = create :user
+    sign_in @user
   end
 
   test 'visiting the index' do
     visit books_url
-    assert_selector 'h1', text: 'Books'
+    assert_selector 'h1', text: I18n.t('views.common.title_index', name: Book.model_name.human)
   end
 
   test 'should create book' do

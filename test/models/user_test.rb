@@ -4,16 +4,15 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   def setup
-    @test_user = User.new
-    @test_user.email = 'test@test.com'
+    @user = create(:user)
   end
 
   test 'name_or_emailメソッドでnameの登録がある場合はnameが返る' do
-    @test_user.name = 'test user'
-    assert_equal 'test user', @test_user.name_or_email
+    @user.name = 'test user'
+    assert_equal 'test user', @user.name_or_email
   end
 
   test 'name_or_emailメソッドでnameが無い場合はemailが返る' do
-    assert_equal 'test@test.com', @test_user.name_or_email
+    assert_equal @user.email, @user.name_or_email
   end
 end
