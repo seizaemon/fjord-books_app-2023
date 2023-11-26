@@ -18,7 +18,7 @@ class ReportTest < ActiveSupport::TestCase
   end
 
   test 'created_onを呼び出して指定の日時が返る' do
-    @report.created_at = '2023-11-11'
+    @report.created_at = '2023-11-11 23:30:19'
     assert_equal Date.new(2023, 11, 11), @report.created_on
   end
 end

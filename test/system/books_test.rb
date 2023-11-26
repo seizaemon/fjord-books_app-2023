@@ -46,6 +46,14 @@ class BooksTest < ApplicationSystemTestCase
     assert_text I18n.t('controllers.common.notice_destroy', name: Book.model_name.human)
   end
 
+  test 'コメントの追加' do
+    pass
+  end
+
+  test 'コメントの削除' do
+    pass
+  end
+
   private
 
   def fill_in_context

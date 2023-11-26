@@ -5,8 +5,9 @@ require 'test_helper'
 class BooksControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
   setup do
-    @book = create(:book)
-    sign_in create(:user)
+    @book = create :book
+    @new_book = build :book
+    sign_in create :user
   end
 
   test 'should get index' do
@@ -20,9 +21,8 @@ class BooksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should create book' do
-    assert_difference('Book.count') do
-      new_book = build(:book)
-      post books_url, params: { book: { memo: new_book.memo, title: new_book.title } }
+    assert_difference('Book.count', 1) do
+      post books_url, params: { book: { memo: @new_book.memo, title: @new_book.title } }
     end
 
     assert_redirected_to book_url(Book.last)
@@ -39,8 +39,7 @@ class BooksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should update book' do
-    update_book = build(:book)
-    patch book_url(@book), params: { book: { memo: update_book.memo, title: update_book.title } }
+    patch book_url(@book), params: { book: { memo: @new_book.memo, title: @new_book.title } }
     assert_redirected_to book_url(@book)
   end
 
