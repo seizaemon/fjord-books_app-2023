@@ -53,4 +53,11 @@ class ReportsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to reports_url
   end
+
+  test 'reportのcommentが削除できる' do
+    commented_report = create :report_comment
+    sign_in commented_report.user
+    delete comment_url(commented_report)
+    assert_redirected_to report_url commented_report.commentable
+  end
 end

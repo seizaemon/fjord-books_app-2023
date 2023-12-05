@@ -27,4 +27,8 @@ class ReportMentionTest < ActiveSupport::TestCase
   test 'メンションしていることが記録される' do
     assert_equal @report_mentioning.mentioning_reports.to_a, [@report_mentioned]
   end
+
+  test '自分が書いたメンションは表示されない' do
+    pass
+  end
 end

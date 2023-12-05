@@ -50,4 +50,11 @@ class BooksControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to books_url
   end
+
+  test 'bookのcommentが削除できる' do
+    commented_book = create :book_comment
+    sign_in commented_book.user
+    delete comment_url(commented_book)
+    assert_redirected_to book_url commented_book.commentable
+  end
 end
