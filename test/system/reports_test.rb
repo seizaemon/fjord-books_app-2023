@@ -59,5 +59,4 @@ class ReportsTest < ApplicationSystemTestCase
     fill_in I18n.t('activerecord.attributes.report.content'), with: @new_report.content
     fill_in I18n.t('activerecord.attributes.report.title'), with: @new_report.title
   end
-
 end

@@ -6,7 +6,8 @@ class ReportsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    @report = create(:report)
+    @report = create :report
+    @new_report = build :report
     @user = @report.user
     sign_in @user
   end
@@ -22,9 +23,8 @@ class ReportsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should create report' do
-    new_report = build(:report)
     assert_difference('Report.count') do
-      post reports_url, params: { report: { content: new_report.content, title: new_report.title, user_id: @report.user_id } }
+      post reports_url, params: { report: { content: @new_report.content, title: @new_report.title, user_id: @report.user_id } }
     end
 
     assert_redirected_to report_url(Report.last)
@@ -41,8 +41,7 @@ class ReportsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should update report' do
-    update_report = build(:report)
-    patch report_url(@report), params: { report: { content: update_report.content, title: update_report.title, user_id: @report.user_id } }
+    patch report_url(@report), params: { report: { content: @new_report.content, title: @new_report.title, user_id: @report.user_id } }
     assert_redirected_to report_url(@report)
   end
 
