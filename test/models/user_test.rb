@@ -4,7 +4,7 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   def setup
-    @user = create(:user)
+    @user = create :user
   end
 
   test 'name_or_emailメソッドでnameの登録がある場合はnameが返る' do

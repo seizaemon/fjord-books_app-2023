@@ -6,7 +6,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    @user = create(:user)
+    @user = create :user
     sign_in @user
   end
 

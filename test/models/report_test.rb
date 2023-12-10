@@ -4,9 +4,9 @@ require 'test_helper'
 
 class ReportTest < ActiveSupport::TestCase
   setup do
-    @report = create(:report)
+    @report = create :report
     @author = @report.user
-    @not_author = create(:user)
+    @other = create :user
   end
 
   test 'ログインユーザーがreport作成ユーザーと同じ場合editableがtrueになる' do
@@ -14,7 +14,7 @@ class ReportTest < ActiveSupport::TestCase
   end
 
   test 'ログインユーザがreport作成ユーザーと違う場合はeditableがfalseになる' do
-    assert_equal false, @report.editable?(@not_author)
+    assert_equal false, @report.editable?(@other)
   end
 
   test 'created_onを呼び出して指定の日時が返る' do
