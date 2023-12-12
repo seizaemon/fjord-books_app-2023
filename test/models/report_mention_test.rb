@@ -16,8 +16,6 @@ class ReportMentionTest < ActiveSupport::TestCase
       user: create(:user),
       content: "#{report_url(@report_mentioned, host: 'localhost:3000')} is mentioning."
     )
-    @report_mentioned.save
-    @report_mentioning.save
   end
 
   test 'メンションされていることが記録される' do
@@ -28,7 +26,13 @@ class ReportMentionTest < ActiveSupport::TestCase
     assert_equal @report_mentioning.mentioning_reports.to_a, [@report_mentioned]
   end
 
-  test '自分が書いたメンションは表示されない' do
-    pass
+  test '自分が書いたメンションは記録されない' do
+    report_self_mentioning = create(
+      :report,
+      user: @report_mentioned.user,
+      content: "#{report_url(@report_mentioned, host: 'localhost:3000')} is mentioning."
+    )
+
+    assert_equal report_self_mentioning.mentioned_reports.to_a, []
   end
 end

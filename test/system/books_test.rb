@@ -47,11 +47,33 @@ class BooksTest < ApplicationSystemTestCase
   end
 
   test 'コメントの追加' do
-    pass
+    visit book_url(@book)
+
+    fill_in 'comment_content', with: 'コメント'
+    click_on I18n.t('shared.comments.create')
+
+    assert_text I18n.t('controllers.common.notice_create', name: Comment.model_name.human)
+    click_on I18n.t('views.common.back', name: Book.model_name.human)
   end
 
   test 'コメントの削除' do
-    pass
+    create :book_comment, user: @user, commentable: @book
+    visit book_url(@book)
+
+    accept_confirm do
+      click_on I18n.t('shared.comments.delete'), match: :first
+    end
+
+    assert_text I18n.t('controllers.common.notice_destroy', name: Comment.model_name.human)
+    click_on I18n.t('views.common.back', name: Book.model_name.human)
+  end
+
+  test '自分の書いたコメント以外は削除できない' do
+    create :book_comment, commentable: @book
+    visit book_url(@book)
+
+    assert_no_selector I18n.t('shared.comments.delete')
+    click_on I18n.t('views.common.back', name: Book.model_name.human)
   end
 
   private

@@ -46,11 +46,33 @@ class ReportsTest < ApplicationSystemTestCase
   end
 
   test 'コメントの追加' do
-    pass
+    visit report_url(@report)
+
+    fill_in 'comment_content', with: 'コメント'
+    click_on I18n.t('shared.comments.create')
+
+    assert_text I18n.t('controllers.common.notice_create', name: Comment.model_name.human)
+    click_on I18n.t('views.common.back', name: Report.model_name.human)
   end
 
   test 'コメントの削除' do
-    pass
+    create :report_comment, user: @report.user, commentable: @report
+    visit report_url(@report)
+
+    accept_confirm do
+      click_on I18n.t('shared.comments.delete'), match: :first
+    end
+
+    assert_text I18n.t('controllers.common.notice_destroy', name: Comment.model_name.human)
+    click_on I18n.t('views.common.back', name: Report.model_name.human)
+  end
+
+  test '自分の書いたコメント以外は削除できない' do
+    create :report_comment, commentable: @report
+    visit report_url(@report)
+
+    assert_no_selector I18n.t('shared.comments.delete')
+    click_on I18n.t('views.common.back', name: Report.model_name.human)
   end
 
   private
