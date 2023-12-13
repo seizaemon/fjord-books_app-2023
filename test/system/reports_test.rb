@@ -76,6 +76,7 @@ class ReportsTest < ApplicationSystemTestCase
   end
 
   test 'メールアドレスとパスワードでログインし日報を書く' do
+    # このテストは未ログイン状態からスタートする
     sign_out @report.user
 
     visit new_user_session_url
