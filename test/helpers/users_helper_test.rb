@@ -6,11 +6,11 @@ class UsersHelperTest < ActionView::TestCase
     @user = create :user
   end
 
-  test 'current_user_nameでemailのみをセットした場合emailだけ返る' do
+  test 'current_user_nameでemailのみをセットした場合emailが返る' do
     assert_equal current_user_name(@user), @user.email
   end
 
-  test 'current_user_nameでnameとemail両方セットしてあると両方返る' do
+  test 'current_user_nameでnameとemail両方セットするとnameが返る' do
     @user.name = 'test user'
     assert_equal current_user_name(@user), @user.name
   end

@@ -9,11 +9,11 @@ class ReportTest < ActiveSupport::TestCase
     @other = create :user
   end
 
-  test 'ログインユーザーがreport作成ユーザーと同じ場合editableがtrueになる' do
+  test 'report作成ユーザーがログインユーザーと同じ場合そのreportのeditableがtrueになる' do
     assert_equal true, @report.editable?(@author)
   end
 
-  test 'ログインユーザがreport作成ユーザーと違う場合はeditableがfalseになる' do
+  test 'report作成ユーザーがログインユーザーではない場合そのreportのeditableがfalseになる' do
     assert_equal false, @report.editable?(@other)
   end
 

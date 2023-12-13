@@ -75,6 +75,25 @@ class ReportsTest < ApplicationSystemTestCase
     click_on I18n.t('views.common.back', name: Report.model_name.human)
   end
 
+  test 'メールアドレスとパスワードでログインし日報を書く' do
+    sign_out @report.user
+
+    visit new_user_session_url
+
+    fill_in 'user_email', with: @report.user.email
+    fill_in 'user_password', with: @report.user.password
+    click_on 'commit'
+
+    # メニューの日報を押す
+    click_on Report.model_name.human
+    click_on I18n.t('views.common.new', name: Report.model_name.human)
+    fill_in_context
+    click_on I18n.t('helpers.submit.create')
+
+    assert_text I18n.t('controllers.common.notice_create', name: Report.model_name.human)
+    click_on I18n.t('views.common.back', name: Report.model_name.human)
+  end
+
   private
 
   def fill_in_context
