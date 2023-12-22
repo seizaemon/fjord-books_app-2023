@@ -24,6 +24,11 @@ class ReportsTest < ApplicationSystemTestCase
     click_on I18n.t('helpers.submit.create')
 
     assert_text I18n.t('controllers.common.notice_create', name: Report.model_name.human)
+    assert_text "#{Report.human_attribute_name(:title)}: #{@new_report.title}"
+    assert_text "#{Report.human_attribute_name(:content)}: #{@new_report.content}"
+    assert_text "#{Report.human_attribute_name(:user)}: #{@report.user.name_or_email}"
+    assert_link @report.user.name_or_email, href: user_path(@report.user)
+
     click_on I18n.t('views.common.back', name: Report.model_name.human)
   end
 
@@ -35,14 +40,20 @@ class ReportsTest < ApplicationSystemTestCase
     click_on I18n.t('helpers.submit.update')
 
     assert_text I18n.t('controllers.common.notice_update', name: Report.model_name.human)
+    assert_text "#{Report.human_attribute_name(:title)}: #{@new_report.title}"
+    assert_text "#{Report.human_attribute_name(:content)}: #{@new_report.content}"
+    assert_text "#{Report.human_attribute_name(:user)}: #{@report.user.name_or_email}"
+    assert_link @report.user.name_or_email, href: user_path(@report.user)
+
     click_on I18n.t('views.common.back', name: Report.model_name.human)
   end
 
   test 'should destroy Report' do
     visit report_url(@report)
     click_on I18n.t('shared.comments.delete'), match: :first
-
     assert_text I18n.t('controllers.common.notice_destroy', name: Report.model_name.human)
+
+    assert_not Report.where(id: @report.id).exists?
   end
 
   test 'コメントの追加' do
@@ -56,7 +67,7 @@ class ReportsTest < ApplicationSystemTestCase
   end
 
   test 'コメントの削除' do
-    create :report_comment, user: @report.user, commentable: @report
+    created_comment = create :report_comment, user: @report.user, commentable: @report
     visit report_url(@report)
 
     accept_confirm do
@@ -64,6 +75,7 @@ class ReportsTest < ApplicationSystemTestCase
     end
 
     assert_text I18n.t('controllers.common.notice_destroy', name: Comment.model_name.human)
+    assert_not Comment.where(id: created_comment.id).exists?
     click_on I18n.t('views.common.back', name: Report.model_name.human)
   end
 
