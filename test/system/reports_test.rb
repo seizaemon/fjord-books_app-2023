@@ -19,21 +19,31 @@ class ReportsTest < ApplicationSystemTestCase
   test 'should create report' do
     visit reports_url
     click_on I18n.t('views.common.new', name: Report.model_name.human)
-    fill_in_context
+    fill_in I18n.t('activerecord.attributes.report.content'), with: @new_report.content
+    fill_in I18n.t('activerecord.attributes.report.title'), with: @new_report.title
+
     click_on I18n.t('helpers.submit.create')
 
     assert_text I18n.t('controllers.common.notice_create', name: Report.model_name.human)
-    check_context
+    assert_text "#{Report.human_attribute_name(:title)}: #{@new_report.title}"
+    assert_text "#{Report.human_attribute_name(:content)}: #{@new_report.content}"
+    assert_text "#{Report.human_attribute_name(:user)}: #{@report.user.name_or_email}"
+    assert_link @report.user.name_or_email, href: user_path(@report.user)
   end
 
   test 'should update Report' do
     visit report_url(@report)
     click_on I18n.t('views.common.edit', name: Report.model_name.human), match: :first
-    fill_in_context
+    fill_in I18n.t('activerecord.attributes.report.content'), with: @new_report.content
+    fill_in I18n.t('activerecord.attributes.report.title'), with: @new_report.title
+
     click_on I18n.t('helpers.submit.update')
 
     assert_text I18n.t('controllers.common.notice_update', name: Report.model_name.human)
-    check_context
+    assert_text "#{Report.human_attribute_name(:title)}: #{@new_report.title}"
+    assert_text "#{Report.human_attribute_name(:content)}: #{@new_report.content}"
+    assert_text "#{Report.human_attribute_name(:user)}: #{@report.user.name_or_email}"
+    assert_link @report.user.name_or_email, href: user_path(@report.user)
   end
 
   test 'should destroy Report' do
@@ -85,21 +95,11 @@ class ReportsTest < ApplicationSystemTestCase
     # メニューの日報を押す
     click_on Report.model_name.human
     click_on I18n.t('views.common.new', name: Report.model_name.human)
-    fill_in_context
+    fill_in I18n.t('activerecord.attributes.report.content'), with: @new_report.content
+    fill_in I18n.t('activerecord.attributes.report.title'), with: @new_report.title
     click_on I18n.t('helpers.submit.create')
 
     assert_text I18n.t('controllers.common.notice_create', name: Report.model_name.human)
-    check_context
-  end
-
-  private
-
-  def fill_in_context
-    fill_in I18n.t('activerecord.attributes.report.content'), with: @new_report.content
-    fill_in I18n.t('activerecord.attributes.report.title'), with: @new_report.title
-  end
-
-  def check_context
     assert_text "#{Report.human_attribute_name(:title)}: #{@new_report.title}"
     assert_text "#{Report.human_attribute_name(:content)}: #{@new_report.content}"
     assert_text "#{Report.human_attribute_name(:user)}: #{@report.user.name_or_email}"

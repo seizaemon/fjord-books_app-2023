@@ -20,21 +20,29 @@ class BooksTest < ApplicationSystemTestCase
   test 'should create book' do
     visit books_url
     click_on I18n.t('views.common.new', name: Book.model_name.human)
-    fill_in_context
+    fill_in I18n.t('activerecord.attributes.book.memo'), with: @new_book.memo
+    fill_in I18n.t('activerecord.attributes.book.title'), with: @new_book.title
+    fill_in I18n.t('activerecord.attributes.book.author'), with: @new_book.author
     click_on I18n.t('helpers.submit.create')
 
     assert_text I18n.t('controllers.common.notice_create', name: Book.model_name.human)
-    check_context
+    assert_text "#{Book.human_attribute_name(:title)}: #{@new_book.title}"
+    assert_text "#{Book.human_attribute_name(:memo)}: #{@new_book.memo}"
+    assert_text "#{Book.human_attribute_name(:author)}: #{@new_book.author}"
   end
 
   test 'should update Book' do
     visit book_url(@book)
     click_on I18n.t('views.common.edit', name: Book.model_name.human), match: :first
-    fill_in_context
+    fill_in I18n.t('activerecord.attributes.book.memo'), with: @new_book.memo
+    fill_in I18n.t('activerecord.attributes.book.title'), with: @new_book.title
+    fill_in I18n.t('activerecord.attributes.book.author'), with: @new_book.author
     click_on I18n.t('helpers.submit.update')
 
     assert_text I18n.t('controllers.common.notice_update', name: Book.model_name.human)
-    check_context
+    assert_text "#{Book.human_attribute_name(:title)}: #{@new_book.title}"
+    assert_text "#{Book.human_attribute_name(:memo)}: #{@new_book.memo}"
+    assert_text "#{Book.human_attribute_name(:author)}: #{@new_book.author}"
   end
 
   test 'should destroy Book' do
@@ -71,19 +79,5 @@ class BooksTest < ApplicationSystemTestCase
     visit book_url(@book)
 
     assert_no_selector I18n.t('shared.comments.delete')
-  end
-
-  private
-
-  def fill_in_context
-    fill_in I18n.t('activerecord.attributes.book.memo'), with: @new_book.memo
-    fill_in I18n.t('activerecord.attributes.book.title'), with: @new_book.title
-    fill_in I18n.t('activerecord.attributes.book.author'), with: @new_book.author
-  end
-
-  def check_context
-    assert_text "#{Book.human_attribute_name(:title)}: #{@new_book.title}"
-    assert_text "#{Book.human_attribute_name(:memo)}: #{@new_book.memo}"
-    assert_text "#{Book.human_attribute_name(:author)}: #{@new_book.author}"
   end
 end
