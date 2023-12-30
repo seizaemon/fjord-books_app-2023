@@ -25,6 +25,8 @@ class BooksControllerTest < ActionDispatch::IntegrationTest
       post books_url, params: { book: { memo: @new_book.memo, title: @new_book.title } }
     end
 
+    assert_equal Book.last.memo, @new_book.memo
+    assert_equal Book.last.title, @new_book.title
     assert_redirected_to book_url(Book.last)
   end
 
@@ -40,6 +42,10 @@ class BooksControllerTest < ActionDispatch::IntegrationTest
 
   test 'should update book' do
     patch book_url(@book), params: { book: { memo: @new_book.memo, title: @new_book.title } }
+
+    @book.reload
+    assert_equal @book.memo, @new_book.memo
+    assert_equal @book.title, @new_book.title
     assert_redirected_to book_url(@book)
   end
 
@@ -51,10 +57,28 @@ class BooksControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to books_url
   end
 
+  test 'bookのcommentが作成できる' do
+    new_comment = build :book_comment
+    sign_in new_comment.user
+
+    assert_difference('Comment.count', 1) do
+      post book_comments_url(@book, new_comment), params: { comment: {
+        content: new_comment.content
+      } }
+    end
+    assert_equal Comment.last.content, new_comment.content
+    assert_equal Comment.last.user, new_comment.user
+  end
+
   test 'bookのcommentが削除できる' do
-    commented_book = create :book_comment
-    sign_in commented_book.user
-    delete comment_url(commented_book)
-    assert_redirected_to book_url commented_book.commentable
+    posted_comment = create :book_comment
+    sign_in posted_comment.user
+
+    assert_difference('Comment.count', -1) do
+      delete comment_url(posted_comment)
+    end
+
+    assert_equal Comment.where(id: posted_comment.id), []
+    assert_redirected_to book_url posted_comment.commentable
   end
 end
