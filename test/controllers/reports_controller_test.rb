@@ -52,7 +52,10 @@ class ReportsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should update report' do
-    patch report_url(@report), params: { report: { content: @new_report.content, title: @new_report.title }}
+    patch report_url(@report), params: { report: {
+      content: @new_report.content,
+      title: @new_report.title
+    } }
     @report.reload
 
     assert_equal @report.content, @new_report.content
@@ -76,7 +79,7 @@ class ReportsControllerTest < ActionDispatch::IntegrationTest
     assert_difference('Comment.count', 1) do
       post report_comments_url(@report, new_comment), params: { comment: {
         content: new_comment.content
-      }}
+      } }
     end
     assert_equal Comment.last.content, new_comment.content
     assert_equal Comment.last.user, new_comment.user
@@ -96,7 +99,7 @@ class ReportsControllerTest < ActionDispatch::IntegrationTest
     sign_in @mentioning_report.user
     patch report_url(@mentioning_report), params: {
       report: {
-        content: "#{report_url(new_mentioned_report, host: 'localhost:3000')} is mentioning.",
+        content: "#{report_url(new_mentioned_report, host: 'localhost:3000')} is mentioning."
       }
     }
     @report.reload
@@ -112,7 +115,7 @@ class ReportsControllerTest < ActionDispatch::IntegrationTest
     sign_in @mentioning_report.user
     patch report_url(@mentioning_report), params: {
       report: {
-        content: "#{report_url(new_mentioned_report, host: 'localhost:3000')} is mentioning.",
+        content: "#{report_url(new_mentioned_report, host: 'localhost:3000')} is mentioning."
       }
     }
     @mentioning_report.reload
