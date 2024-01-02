@@ -50,7 +50,7 @@ class BooksTest < ApplicationSystemTestCase
     click_on I18n.t('views.common.destroy', name: Book.model_name.human), match: :first
 
     assert_text I18n.t('controllers.common.notice_destroy', name: Book.model_name.human)
-    assert_not Book.where(id: @book.id).exists?
+    assert_no_selector "div#{dom_id @book}"
   end
 
   test 'コメントの追加' do
@@ -71,7 +71,7 @@ class BooksTest < ApplicationSystemTestCase
     end
 
     assert_text I18n.t('controllers.common.notice_destroy', name: Comment.model_name.human)
-    assert_not Comment.where(id: created_comment.id).exists?
+    assert_no_selector 'div.comment-controller>ul>li:first-child', text: created_comment.content
   end
 
   test '自分の書いたコメント以外は削除できない' do

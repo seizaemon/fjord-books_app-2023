@@ -47,11 +47,11 @@ class ReportsTest < ApplicationSystemTestCase
   end
 
   test 'should destroy Report' do
-    visit report_url(@report)
+    visit report_url @report
     click_on I18n.t('shared.comments.delete'), match: :first
 
     assert_text I18n.t('controllers.common.notice_destroy', name: Report.model_name.human)
-    assert_not Report.where(id: @report.id).exists?
+    assert_no_selector "div#{dom_id @report}"
   end
 
   test 'コメントの追加' do
@@ -72,7 +72,7 @@ class ReportsTest < ApplicationSystemTestCase
     end
 
     assert_text I18n.t('controllers.common.notice_destroy', name: Comment.model_name.human)
-    assert_not Comment.where(id: created_comment.id).exists?
+    assert_no_selector 'div.comment-controller>ul>li:first-child', text: created_comment.content
   end
 
   test '自分の書いたコメント以外は削除できない' do
