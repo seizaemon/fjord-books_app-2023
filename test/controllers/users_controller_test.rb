@@ -3,13 +3,20 @@
 require 'test_helper'
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
+  setup do
+    @user = create :user
+    sign_in @user
+  end
+
   test 'should get index' do
-    get users_index_url
+    get users_path
     assert_response :success
   end
 
   test 'should get show' do
-    get users_show_url
+    get user_path @user.id
     assert_response :success
   end
 end
