@@ -32,7 +32,7 @@ class BooksTest < ApplicationSystemTestCase
   end
 
   test 'should update Book' do
-    visit book_url(@book)
+    visit book_url @book
     click_on I18n.t('views.common.edit', name: Book.model_name.human), match: :first
     fill_in I18n.t('activerecord.attributes.book.memo'), with: @new_book.memo
     fill_in I18n.t('activerecord.attributes.book.title'), with: @new_book.title
@@ -46,37 +46,39 @@ class BooksTest < ApplicationSystemTestCase
   end
 
   test 'should destroy Book' do
-    visit book_url(@book)
+    visit book_url @book
     click_on I18n.t('views.common.destroy', name: Book.model_name.human), match: :first
 
     assert_text I18n.t('controllers.common.notice_destroy', name: Book.model_name.human)
-    assert_no_selector "div#{dom_id @book}"
+    assert_no_text @book.title
+    assert_no_text @book.memo
+    assert_no_text @book.author
   end
 
   test 'コメントの追加' do
-    visit book_url(@book)
+    visit book_url @book
     fill_in 'comment_content', with: 'コメントテストbook'
     click_on I18n.t('shared.comments.create')
 
     assert_text I18n.t('controllers.common.notice_create', name: Comment.model_name.human)
-    assert_selector 'div.comments-container>ul>li:last-child', text: 'コメントテストbook'
+    assert_text 'コメントテストbook'
   end
 
   test 'コメントの削除' do
     created_comment = create :book_comment, user: @user, commentable: @book
-    visit book_url(@book)
+    visit book_url @book
 
     accept_confirm do
       click_on I18n.t('shared.comments.delete'), match: :first
     end
 
     assert_text I18n.t('controllers.common.notice_destroy', name: Comment.model_name.human)
-    assert_no_selector 'div.comment-controller>ul>li:first-child', text: created_comment.content
+    assert_no_text created_comment.content
   end
 
   test '自分の書いたコメント以外は削除できない' do
     create :book_comment, commentable: @book
-    visit book_url(@book)
+    visit book_url @book
 
     assert_no_selector I18n.t('shared.comments.delete')
   end

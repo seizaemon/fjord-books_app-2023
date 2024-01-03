@@ -51,7 +51,8 @@ class ReportsTest < ApplicationSystemTestCase
     click_on I18n.t('shared.comments.delete'), match: :first
 
     assert_text I18n.t('controllers.common.notice_destroy', name: Report.model_name.human)
-    assert_no_selector "div#{dom_id @report}"
+    assert_no_text @report.title
+    assert_no_text @report.content
   end
 
   test 'コメントの追加' do
@@ -60,7 +61,7 @@ class ReportsTest < ApplicationSystemTestCase
     click_on I18n.t('shared.comments.create')
 
     assert_text I18n.t('controllers.common.notice_create', name: Comment.model_name.human)
-    assert_selector 'div.comments-container>ul>li:last-child', text: 'コメントテストreport'
+    assert_text 'コメントテストreport'
   end
 
   test 'コメントの削除' do
@@ -72,7 +73,7 @@ class ReportsTest < ApplicationSystemTestCase
     end
 
     assert_text I18n.t('controllers.common.notice_destroy', name: Comment.model_name.human)
-    assert_no_selector 'div.comment-controller>ul>li:first-child', text: created_comment.content
+    assert_no_text created_comment.content
   end
 
   test '自分の書いたコメント以外は削除できない' do
